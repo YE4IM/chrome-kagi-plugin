@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <title>主页设置 · 主页新标签页</title>
+    <style>
+        :root {
+            --bg: #f4f5f9;
+            --card-bg: rgba(255, 255, 255, 0.86);
+            --card-border: rgba(255, 255, 255, 0.6);
+            --text: #1c1e26;
+            --text-secondary: #5c6270;
+            --text-tertiary: #9aa0ae;
+            --accent: #6366f1;
+            --accent-strong: #4f46e5;
+            --accent-soft: rgba(99, 102, 241, 0.12);
+            --input-bg: #ffffff;
+            --input-border: #d9dce4;
+            --danger: #e5484d;
+            --success: #30a46c;
+            --shadow: 0 20px 60px rgba(28, 30, 38, 0.12);
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #101218;
+                --card-bg: rgba(26, 29, 38, 0.86);
+                --card-border: rgba(255, 255, 255, 0.08);
+                --text: #eceef2;
+                --text-secondary: #a6adbb;
+                --text-tertiary: #6b7280;
+                --accent: #818cf8;
+                --accent-strong: #6366f1;
+                --accent-soft: rgba(129, 140, 248, 0.16);
+                --input-bg: rgba(255, 255, 255, 0.04);
+                --input-border: rgba(255, 255, 255, 0.14);
+                --danger: #ff6369;
+                --success: #3dd68c;
+                --shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+            }
+        }
+        * { box-sizing: border-box; }
+        html, body { height: 100%; }
+        body {
+            margin: 0;
+            font: 15px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        /* 背景装饰光斑 */
+        .blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        .blob-1 {
+            width: 420px; height: 420px;
+            background: radial-gradient(circle, #818cf8 0%, transparent 70%);
+            top: -120px; left: -80px;
+        }
+        .blob-2 {
+            width: 380px; height: 380px;
+            background: radial-gradient(circle, #f0a6a0 0%, transparent 70%);
+            bottom: -120px; right: -60px;
+        }
+        @media (prefers-color-scheme: dark) {
+            .blob { opacity: 0.22; }
+        }
+
+        .card {
+            position: relative;
+            width: 100%;
+            max-width: 520px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            padding: 36px 36px 30px;
+            animation: rise 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+        @keyframes rise {
+            from { opacity: 0; transform: translateY(14px) scale(0.985); }
+            to   { opacity: 1; transform: none; }
+        }
+        @media (max-width: 480px) {
+            .card { padding: 28px 22px 24px; }
+        }
+
+        .header { text-align: center; margin-bottom: 26px; }
+        .logo {
+            width: 56px; height: 56px;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.35);
+        }
+        .header h1 {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin: 14px 0 4px;
+        }
+        .header p {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 13.5px;
+        }
+
+        .field-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+        .input-wrap {
+            display: flex;
+            align-items: center;
+            background: var(--input-bg);
+            border: 1.5px solid var(--input-border);
+            border-radius: 12px;
+            transition: border-color 0.18s, box-shadow 0.18s;
+        }
+        .input-wrap:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px var(--accent-soft);
+        }
+        .input-wrap.invalid {
+            border-color: var(--danger);
+            box-shadow: 0 0 0 4px rgba(229, 72, 77, 0.14);
+        }
+        .input-wrap .scheme {
+            padding: 0 4px 0 14px;
+            color: var(--text-tertiary);
+            font-size: 14px;
+            user-select: none;
+            white-space: nowrap;
+        }
+        #hp {
+            flex: 1;
+            min-width: 0;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: var(--text);
+            font: inherit;
+            padding: 12px 14px 12px 6px;
+        }
+        #hp[readonly] {
+            color: var(--text-secondary);
+            cursor: default;
+        }
+        #hp::placeholder { color: var(--text-tertiary); }
+        .shake { animation: shake 0.35s; }
+        @keyframes shake {
+            20% { transform: translateX(-6px); }
+            40% { transform: translateX(5px); }
+            60% { transform: translateX(-3px); }
+            80% { transform: translateX(2px); }
+        }
+        .error-msg {
+            display: none;
+            color: var(--danger);
+            font-size: 12.5px;
+            margin-top: 7px;
+        }
+        .error-msg.show { display: block; }
+
+        .presets { margin-top: 20px; }
+        .presets-label {
+            font-size: 12.5px;
+            color: var(--text-tertiary);
+            margin-bottom: 10px;
+        }
+        .chips { display: flex; flex-wrap: wrap; gap: 7px; }
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 11px;
+            border-radius: 999px;
+            border: 1px solid var(--input-border);
+            background: var(--input-bg);
+            color: var(--text-secondary);
+            font: inherit;
+            font-size: 12.5px;
+            cursor: pointer;
+            transition: all 0.16s ease;
+        }
+        .chip:hover {
+            border-color: var(--accent);
+            color: var(--text);
+            transform: translateY(-1px);
+        }
+        .chip.active {
+            border-color: var(--accent);
+            background: var(--accent-soft);
+            color: var(--accent-strong);
+            font-weight: 600;
+        }
+        .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 26px;
+        }
+        button.btn {
+            font: inherit;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.16s ease;
+        }
+        .btn-save {
+            flex: 1;
+            padding: 12px 0;
+            border: none;
+            color: #fff;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
+            box-shadow: 0 6px 18px rgba(99, 102, 241, 0.35);
+        }
+        .btn-save:hover { transform: translateY(-1px); box-shadow: 0 9px 24px rgba(99, 102, 241, 0.45); }
+        .btn-save:active { transform: translateY(0); }
+        .btn-save:disabled,
+        .btn-save:disabled:hover {
+            opacity: 0.5;
+            box-shadow: none;
+            cursor: default;
+            transform: none;
+        }
+        .btn-save.saved {
+            background: linear-gradient(135deg, #34b37a, #26916a);
+            box-shadow: 0 6px 18px rgba(48, 164, 108, 0.35);
+        }
+        .btn-reset {
+            padding: 12px 20px;
+            border: 1.5px solid var(--input-border);
+            background: transparent;
+            color: var(--text-secondary);
+        }
+        .btn-reset:hover { border-color: var(--danger); color: var(--danger); }
+
+        .status {
+            min-height: 22px;
+            margin-top: 16px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-tertiary);
+            transition: color 0.2s;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .status.success { color: var(--success); }
+
+        .footer {
+            margin-top: 18px;
+            padding-top: 16px;
+            border-top: 1px solid var(--input-border);
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+    </style>
+</head>
+<body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <main class="card">
+        <div class="header">
+            <img class="logo" id="siteLogo" src="kagi.png" alt="网站图标" referrerpolicy="no-referrer">
+            <h1>主页新标签页</h1>
+            <p>设置打开新标签页时自动跳转的网站地址</p>
+        </div>
+
+        <label class="field-label" for="hp">主页地址</label>
+        <div class="input-wrap" id="inputWrap">
+            <span class="scheme" id="schemeHint">https://</span>
+            <input id="hp" type="text" spellcheck="false" autocomplete="off" readonly
+                   placeholder="kagi.com" aria-label="主页地址">
+        </div>
+        <div class="error-msg" id="errMsg">请输入有效的网址，例如 kagi.com 或 https://kagi.com</div>
+
+        <div class="presets">
+            <div class="presets-label">快速选择</div>
+            <div class="chips" id="chips">
+                <button class="chip" data-url="https://kagi.com/">
+                    <span class="dot" style="background:#ffb319"></span>Kagi
+                </button>
+                <button class="chip" data-url="https://www.google.com/">
+                    <span class="dot" style="background:#4285f4"></span>Google
+                </button>
+                <button class="chip" data-url="https://www.bing.com/">
+                    <span class="dot" style="background:#008373"></span>Bing
+                </button>
+                <button class="chip" data-url="https://duckduckgo.com/">
+                    <span class="dot" style="background:#de5833"></span>DuckDuckGo
+                </button>
+                <button class="chip" id="customChip">
+                    <span class="dot" style="background:#9aa0ae"></span>其他地址
+                </button>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-reset" id="reset">恢复默认</button>
+            <button class="btn btn-save" id="save" disabled>保存设置</button>
+        </div>
+
+        <div class="status" id="status"></div>
+
+        <div class="footer">打开新标签页即会跳转到所设置的主页 · 保存后立即生效</div>
+    </main>
+
+    <script src="options.js"></script>
+</body>
+</html>
