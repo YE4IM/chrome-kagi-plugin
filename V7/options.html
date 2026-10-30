@@ -103,6 +103,7 @@
         .header { text-align: center; margin-bottom: 26px; }
         .logo {
             width: 56px; height: 56px;
+            object-fit: contain;
             border-radius: 16px;
             box-shadow: 0 8px 24px rgba(99, 102, 241, 0.35);
         }
@@ -199,6 +200,7 @@
             color: var(--accent-strong);
             font-weight: 600;
         }
+        .chip-icon { width: 16px; height: 16px; object-fit: contain; flex: none; }
         .dot { width: 9px; height: 9px; border-radius: 50%; flex: none; }
 
         .actions {
@@ -272,7 +274,7 @@
 
     <main class="card">
         <div class="header">
-            <img class="logo" id="siteLogo" src="kagi.png" alt="网站图标" referrerpolicy="no-referrer">
+            <img class="logo" id="siteLogo" src="icons/kagi.svg" alt="网站图标" referrerpolicy="no-referrer">
             <h1>主页新标签页</h1>
             <p>设置打开新标签页时自动跳转的网站地址</p>
         </div>
@@ -290,17 +292,17 @@
                 <div class="presets">
                     <div class="presets-label">快速选择</div>
                     <div class="chips" id="chips" role="group" aria-label="快速填入主页地址">
-                        <button type="button" class="chip" aria-pressed="false" data-icon="kagi.png" data-url="https://kagi.com/">
-                            <span class="dot" style="background:#ffb319"></span>Kagi
+                        <button type="button" class="chip" aria-pressed="false" data-icon="icons/kagi.svg" data-url="https://kagi.com/">
+                            <img class="chip-icon" src="icons/kagi.svg" alt="" aria-hidden="true">Kagi
                         </button>
                         <button type="button" class="chip" aria-pressed="false" data-icon="icons/google.svg" data-url="https://www.google.com/">
-                            <span class="dot" style="background:#4285f4"></span>Google
+                            <img class="chip-icon" src="icons/google.svg" alt="" aria-hidden="true">Google
                         </button>
                         <button type="button" class="chip" aria-pressed="false" data-icon="icons/bing.svg" data-url="https://www.bing.com/">
-                            <span class="dot" style="background:#008373"></span>Bing
+                            <img class="chip-icon" src="icons/bing.svg" alt="" aria-hidden="true">Bing
                         </button>
                         <button type="button" class="chip" aria-pressed="false" data-icon="icons/duckduckgo.svg" data-url="https://duckduckgo.com/">
-                            <span class="dot" style="background:#de5833"></span>DuckDuckGo
+                            <img class="chip-icon" src="icons/duckduckgo.svg" alt="" aria-hidden="true">DuckDuckGo
                         </button>
                         <button type="button" class="chip" id="customChip" aria-pressed="false">
                             <span class="dot" style="background:#9aa0ae"></span>其他地址
@@ -326,7 +328,7 @@
         <div class="status" id="status" role="status" aria-live="polite" aria-atomic="true"></div>
         <button type="button" class="btn btn-reset" id="retry" hidden>重新读取设置</button>
 
-        <div class="footer">选择或编辑地址后请保存 · 网站图标在本机生成</div>
+        <div class="footer">选择或编辑地址后请保存 · 网站图标在本机加载</div>
     </main>
 
     <script src="settings.js"></script>

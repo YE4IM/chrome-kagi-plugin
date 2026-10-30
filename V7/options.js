@@ -36,7 +36,7 @@ function showInputError(show) {
   errMsg.hidden = !show;
 }
 
-// 图标完全在本机生成，不请求 favicon 服务或目标网站。
+// 预设使用随扩展打包的品牌图标；自定义图标在本机生成，不请求外部服务。
 function updateLogo(url) {
   const preset = presetChips.find((chip) => chip.dataset.url === url);
   if (preset) {
