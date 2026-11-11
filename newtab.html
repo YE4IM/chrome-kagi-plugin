@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
-    <title>正在打开主页</title>
+    <title>…</title>
     <style>
         body { margin: 0; min-height: 100vh; font: 15px/1.6 system-ui, sans-serif; background: #f4f5f9; color: #1c1e26; }
         main { max-width: 480px; padding: 48px 24px; margin: 0 auto; }
@@ -19,16 +19,14 @@
         }
     </style>
     <script src="settings.js" defer></script>
+    <!-- 跳转是唯一热路径：尽早执行，恢复页 DOM 由 newtab.js 按需注入，避免先绘制整套恢复页。 -->
+    <script>(function () {
+        'use strict';
+        try { location.replace('https://kagi.com/'); } catch (e) { /* 恢复页由 newtab.js 接管 */ }
+    })();</script>
     <script src="newtab.js" defer></script>
 </head>
 <body>
-    <main id="recovery" hidden>
-        <h1>打开主页</h1>
-        <p id="message" role="status">正在打开主页…</p>
-        <a id="target" href="https://kagi.com/">手动打开主页</a>
-        <a id="settings" href="options.html">主页设置</a>
-        <button type="button" id="retry">重试</button>
-    </main>
     <noscript>请启用 JavaScript，或<a href="options.html">打开主页设置</a>。</noscript>
 </body>
 </html>

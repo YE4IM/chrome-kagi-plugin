@@ -39,7 +39,11 @@
   }
 
   async function loadSettings() {
-    const local = await storageCall('local', 'get', ['homepage', 'syncEnabled']);
+    // 并行读取 local+sync；未启用同步时丢弃 sync 结果，省一次串行往返。
+    const [local, synced] = await Promise.all([
+      storageCall('local', 'get', ['homepage', 'syncEnabled']),
+      storageCall('sync', 'get', ['homepage']).catch(() => null),
+    ]);
     const cachedHomepage = normalizeHomepage(local.homepage);
     const settings = {
       homepage: cachedHomepage || DEFAULT_HOMEPAGE,
@@ -48,8 +52,7 @@
       warning: local.homepage !== undefined && !cachedHomepage ? '已保存的地址无效，暂时使用默认主页。请重新保存设置。' : '',
     };
     if (settings.syncEnabled) {
-      try {
-        const synced = await storageCall('sync', 'get', ['homepage']);
+      if (synced) {
         const homepage = normalizeHomepage(synced.homepage);
         if (homepage) {
           settings.homepage = homepage;
@@ -59,7 +62,7 @@
           settings.needsRepair = true;
           settings.warning = '同步的地址无效，暂时使用本机主页。请重新保存设置。';
         }
-      } catch {
+      } else {
         settings.warning = '暂时无法读取同步设置，已使用本机主页。';
       }
     }
@@ -69,10 +72,25 @@
   async function saveSettings({ homepage, syncEnabled }) {
     const normalized = normalizeHomepage(homepage);
     if (!normalized) throw new Error('请输入有效的 HTTP 或 HTTPS 网址');
-    // 同步成功后才提交本机设置；关闭同步只影响本机。
-    if (syncEnabled) await storageCall('sync', 'set', { homepage: normalized });
-    await storageCall('local', 'set', { homepage: normalized, syncEnabled: syncEnabled === true });
-    return { homepage: normalized, syncEnabled: syncEnabled === true, needsRepair: false, warning: '' };
+    const enableSync = syncEnabled === true;
+    const localValue = { homepage: normalized, syncEnabled: enableSync };
+    // 先写本机（含 syncEnabled 标志）：local 失败时 sync 尚未写入，两端保持一致旧值。
+    await storageCall('local', 'set', localValue);
+    if (enableSync) {
+      try {
+        await storageCall('sync', 'set', { homepage: normalized });
+      } catch (error) {
+        // sync 写入失败：回退本机 syncEnabled 标志，避免留下"远端旧值却标记已同步"的假状态；
+        // 新地址已在本机生效，重试保存即可再次开启同步。回退本身失败时以原始错误为准。
+        try {
+          await storageCall('local', 'set', { homepage: normalized, syncEnabled: false });
+        } catch {
+          /* 回退尽力而为 */
+        }
+        throw error;
+      }
+    }
+    return { homepage: normalized, syncEnabled: enableSync, needsRepair: false, warning: '' };
   }
 
   const api = { DEFAULT_HOMEPAGE, normalizeHomepage, loadSettings, saveSettings };

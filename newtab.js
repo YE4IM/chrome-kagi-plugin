@@ -1,19 +1,31 @@
 'use strict';
 
-const { DEFAULT_HOMEPAGE, loadSettings } = HomepageSettings;
-const recovery = document.getElementById('recovery');
-const message = document.getElementById('message');
-const targetLink = document.getElementById('target');
+// 跳转优先：head 内联脚本已尝试 location.replace(DEFAULT_HOMEPAGE)。
+// 本脚本只在跳转未生效（读取设置失败、跳转异常或被拦截）时按需注入恢复页 DOM。
+const DEFAULT_HOMEPAGE = HomepageSettings.DEFAULT_HOMEPAGE;
+let recoveryShown = false;
 let recoveryTimer;
 
 function showRecovery(text) {
-  message.textContent = text;
-  recovery.hidden = false;
+  if (recoveryShown) {
+    document.getElementById('message').textContent = text;
+    return;
+  }
+  recoveryShown = true;
+  clearTimeout(recoveryTimer);
+  const main = document.createElement('main');
+  main.id = 'recovery';
+  main.innerHTML = [
+    '<h1>打开主页</h1>',
+    '<p id="message" role="status">正在打开主页…</p>',
+    '<a id="target" href="' + DEFAULT_HOMEPAGE + '">手动打开主页</a>',
+    '<a id="settings" href="' + chrome.runtime.getURL('options.html') + '">主页设置</a>',
+    '<button type="button" id="retry">重试</button>',
+  ].join('');
+  document.body.appendChild(main);
+  document.getElementById('retry').addEventListener('click', () => location.reload());
+  if (text) document.getElementById('message').textContent = text;
 }
-
-document.getElementById('settings').href = chrome.runtime.getURL('options.html');
-document.getElementById('retry').addEventListener('click', () => location.reload());
-targetLink.href = DEFAULT_HOMEPAGE;
 
 async function redirect() {
   // 存储或导航未完成时仍可手动打开主页、重试或进入设置。
@@ -22,13 +34,13 @@ async function redirect() {
   try {
     homepage = (await loadSettings()).homepage;
   } catch {
-    message.textContent = '读取设置失败，正在尝试打开默认主页。';
+    showRecovery('读取设置失败，正在尝试打开默认主页。');
   }
-  targetLink.href = homepage;
+  const target = document.getElementById('target');
+  if (target) target.href = homepage;
   try {
     location.replace(homepage);
   } catch {
-    clearTimeout(recoveryTimer);
     showRecovery('自动跳转失败，请手动打开主页或检查设置。');
   }
 }
