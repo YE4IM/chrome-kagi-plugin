@@ -2,7 +2,10 @@
 
 // 跳转优先：head 内联脚本已尝试 location.replace(DEFAULT_HOMEPAGE)。
 // 本脚本只在跳转未生效（读取设置失败、跳转异常或被拦截）时按需注入恢复页 DOM。
-const DEFAULT_HOMEPAGE = HomepageSettings.DEFAULT_HOMEPAGE;
+// settings.js 加载失败时兜底默认主页，保证恢复页任何失败路径下都能立即出现。
+const DEFAULT_HOMEPAGE =
+  (typeof HomepageSettings !== 'undefined' && HomepageSettings.DEFAULT_HOMEPAGE) ||
+  'https://kagi.com/';
 let recoveryShown = false;
 let recoveryTimer;
 
