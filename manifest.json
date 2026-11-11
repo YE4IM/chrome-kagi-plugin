@@ -1,0 +1,22 @@
+{
+    "manifest_version": 3,
+    "name": "主页新标签页",
+    "version": "2.2.0",
+    "description": "将新标签页重定向到自定义主页",
+    "chrome_url_overrides": {
+        "newtab": "newtab.html"
+    },
+    "permissions": [
+        "storage"
+    ],
+    "options_ui": {
+        "page": "options.html",
+        "open_in_tab": true
+    },
+    "icons": {
+        "128": "kagi.png"
+    },
+    "content_security_policy": {
+        "extension_pages": "script-src 'self'; object-src 'none'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'"
+    }
+}
