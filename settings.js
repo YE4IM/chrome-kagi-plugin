@@ -4,6 +4,33 @@
 
   const DEFAULT_HOMEPAGE = 'https://kagi.com/';
 
+  // 内联跳转镜像：newtab.html 的 head 内联脚本没有异步存储往返可用（导航会先于 await 完成），
+  // 只能同步读取。保存成功后把已生效的主页镜像进扩展页 localStorage（同源、同步 API）供其零延迟读取。
+  // localStorage 受配额/隐私模式限制可能抛异常：镜像只是缓存，失败不影响 chrome.storage 真相。
+  const HOMEPAGE_MIRROR_KEY = 'homepage';
+
+  function saveHomepageMirror(homepage) {
+    try {
+      localStorage.setItem(HOMEPAGE_MIRROR_KEY, homepage);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  // 读取侧校验与 normalizeHomepage 同规则（镜像只应由 saveSettings 写入合法值）。
+  // newtab.html 内联脚本自带此逻辑的最小副本：defer 脚本晚于内联脚本执行，无法复用本函数。
+  function readHomepageMirror() {
+    try {
+      const cached = localStorage.getItem(HOMEPAGE_MIRROR_KEY);
+      if (typeof cached !== 'string') return null;
+      const url = new URL(cached);
+      return ['http:', 'https:'].includes(url.protocol) && url.hostname ? url.href : null;
+    } catch {
+      return null;
+    }
+  }
+
   function normalizeHomepage(raw) {
     if (typeof raw !== 'string') return null;
     const value = raw.trim();
@@ -76,6 +103,8 @@
     const localValue = { homepage: normalized, syncEnabled: enableSync };
     // 先写本机（含 syncEnabled 标志）：local 失败时 sync 尚未写入，两端保持一致旧值。
     await storageCall('local', 'set', localValue);
+    // local 已生效，同步刷新内联跳转镜像；镜像失败不阻断保存（newtab.js 异步修正仍兜底）。
+    saveHomepageMirror(normalized);
     if (enableSync) {
       try {
         await storageCall('sync', 'set', { homepage: normalized });
@@ -93,7 +122,7 @@
     return { homepage: normalized, syncEnabled: enableSync, needsRepair: false, warning: '' };
   }
 
-  const api = { DEFAULT_HOMEPAGE, normalizeHomepage, loadSettings, saveSettings };
+  const api = { DEFAULT_HOMEPAGE, normalizeHomepage, loadSettings, saveSettings, saveHomepageMirror, readHomepageMirror };
   root.HomepageSettings = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(globalThis);
