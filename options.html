@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="color-scheme" content="light dark">
-    <title>主页设置 · 主页新标签页</title>
+    <title data-i18n="pageTitle">主页设置 · 主页新标签页</title>
     <style>
         :root {
             --bg: #f4f5f9;
@@ -272,24 +272,24 @@
 
     <main class="card">
         <div class="header">
-            <img class="logo" id="siteLogo" src="icons/kagi.svg" alt="网站图标" referrerpolicy="no-referrer">
-            <h1>主页新标签页</h1>
-            <p>设置打开新标签页时自动跳转的网站地址</p>
+            <img class="logo" id="siteLogo" src="icons/kagi.svg" alt="网站图标" data-i18n-attr="alt:logoAlt" referrerpolicy="no-referrer">
+            <h1 data-i18n="extName">主页新标签页</h1>
+            <p data-i18n="headerSubtitle">设置打开新标签页时自动跳转的网站地址</p>
         </div>
 
         <form id="settingsForm" novalidate aria-busy="false">
-            <fieldset id="settingsFields" disabled aria-label="主页设置">
-                <label class="field-label" for="hp">主页地址</label>
+            <fieldset id="settingsFields" disabled aria-label="主页设置" data-i18n-attr="aria-label:fieldsetAria">
+                <label class="field-label" for="hp" data-i18n="homepageLabel">主页地址</label>
                 <div class="input-wrap" id="inputWrap">
                     <input id="hp" type="text" inputmode="url" spellcheck="false" autocomplete="off" autocapitalize="off"
                            placeholder="https://kagi.com/" aria-invalid="false" aria-describedby="hpHelp errMsg">
                 </div>
-                <p class="field-help" id="hpHelp">支持域名、内网地址和 IPv6；省略协议时使用 HTTPS，本地服务请填写 http://。</p>
-                <div class="error-msg" id="errMsg" role="alert" hidden>请输入有效的 HTTP 或 HTTPS 网址，例如 kagi.com 或 http://localhost:3000/。</div>
+                <p class="field-help" id="hpHelp" data-i18n="hpHelp">支持域名、内网地址和 IPv6；省略协议时使用 HTTPS，本地服务请填写 http://。</p>
+                <div class="error-msg" id="errMsg" role="alert" hidden data-i18n="errMsg">请输入有效的 HTTP 或 HTTPS 网址，例如 kagi.com 或 http://localhost:3000/。</div>
 
                 <div class="presets">
-                    <div class="presets-label">快速选择</div>
-                    <div class="chips" id="chips" role="group" aria-label="快速填入主页地址">
+                    <div class="presets-label" data-i18n="presetsLabel">快速选择</div>
+                    <div class="chips" id="chips" role="group" aria-label="快速填入主页地址" data-i18n-attr="aria-label:chipsAria">
                         <button type="button" class="chip" aria-pressed="false" data-icon="icons/kagi.svg" data-url="https://kagi.com/">
                             <img class="chip-icon" src="icons/kagi.svg" alt="" aria-hidden="true">Kagi
                         </button>
@@ -303,7 +303,7 @@
                             <img class="chip-icon" src="icons/duckduckgo.svg" alt="" aria-hidden="true">DuckDuckGo
                         </button>
                         <button type="button" class="chip" id="customChip" aria-pressed="false">
-                            <span class="dot" style="background:#9aa0ae"></span>其他地址
+                            <span class="dot" style="background:#9aa0ae"></span><span data-i18n="customChip">其他地址</span>
                         </button>
                     </div>
                 </div>
@@ -311,25 +311,26 @@
                 <div class="sync-setting">
                     <label class="sync-label" for="syncEnabled">
                         <input id="syncEnabled" type="checkbox" aria-describedby="syncHelp">
-                        <span>跨设备同步主页</span>
+                        <span data-i18n="syncLabel">跨设备同步主页</span>
                     </label>
-                    <p class="sync-help" id="syncHelp">默认仅保存在本机。启用并保存后，会把当前地址同步到其他已启用此选项的设备；需要在 Chrome 中开启扩展程序同步。关闭只影响本机。</p>
+                    <p class="sync-help" id="syncHelp" data-i18n="syncHelp">默认仅保存在本机。启用并保存后，会把当前地址同步到其他已启用此选项的设备；需要在 Chrome 中开启扩展程序同步。关闭只影响本机。</p>
                 </div>
 
                 <div class="actions">
-                    <button type="button" class="btn btn-reset" id="reset">恢复默认地址</button>
-                    <button type="submit" class="btn btn-save" id="save" disabled>保存设置</button>
+                    <button type="button" class="btn btn-reset" id="reset" data-i18n="resetBtn">恢复默认地址</button>
+                    <button type="submit" class="btn btn-save" id="save" disabled data-i18n="saveBtn">保存设置</button>
                 </div>
 
             </fieldset>
         </form>
         <div class="status" id="status" role="status" aria-live="polite" aria-atomic="true"></div>
-        <button type="button" class="btn btn-reset" id="retry" hidden>重新读取设置</button>
+        <button type="button" class="btn btn-reset" id="retry" hidden data-i18n="retryBtn">重新读取设置</button>
 
-        <div class="footer">选择或编辑地址后请保存 · 网站图标在本机加载</div>
+        <div class="footer" data-i18n="footerNote">选择或编辑地址后请保存 · 网站图标在本机加载</div>
     </main>
 
     <script src="settings.js"></script>
+    <script src="i18n.js"></script>
     <script src="options.js"></script>
 </body>
 </html>

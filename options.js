@@ -15,6 +15,9 @@ const logoImg = document.getElementById('siteLogo');
 const customChip = document.getElementById('customChip');
 const presetChips = Array.from(document.querySelectorAll('.chip[data-url]'));
 
+// 文案统一走 chrome.i18n：默认英文，浏览器语言为中文时命中 zh_CN。
+const t = (key, subs) => chrome.i18n.getMessage(key, subs) || '';
+
 let savedSettings = null;
 let saving = false;
 let btnRevertTimer;
@@ -41,7 +44,7 @@ function updateLogo(url) {
   const preset = presetChips.find((chip) => chip.dataset.url === url);
   if (preset) {
     logoImg.src = preset.dataset.icon;
-    logoImg.alt = `${preset.textContent.trim()} 图标`;
+    logoImg.alt = t('logoPresetAlt', [preset.textContent.trim()]);
     return;
   }
   let host = '';
@@ -49,7 +52,7 @@ function updateLogo(url) {
   const letter = (host[0] || '?').toUpperCase().replace(/[&<>"']/g, '');
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><rect width="64" height="64" rx="14" fill="#6366f1"/><text x="32" y="43" font-family="system-ui,sans-serif" font-size="32" font-weight="600" fill="white" text-anchor="middle">${letter}</text></svg>`;
   logoImg.src = `data:image/svg+xml,${encodeURIComponent(svg)}`;
-  logoImg.alt = host ? `${host} 的本地字母图标` : '自定义主页图标';
+  logoImg.alt = host ? t('logoHostAlt', [host]) : t('logoCustomAlt');
 }
 
 function updateDraft() {
@@ -66,7 +69,7 @@ function updateDraft() {
 
 function clearSavedFeedback() {
   clearTimeout(btnRevertTimer);
-  saveBtn.textContent = '保存设置';
+  saveBtn.textContent = t('saveBtn');
   saveBtn.classList.remove('saved');
 }
 
@@ -74,7 +77,7 @@ function editDraft() {
   clearSavedFeedback();
   showInputError(false);
   updateDraft();
-  showStatus(isDirty() ? '有未保存的修改，点击「保存设置」后生效。' : `当前主页：${savedSettings.homepage}`);
+  showStatus(isDirty() ? t('statusDirty') : t('statusCurrent', [savedSettings.homepage]));
 }
 
 function applySettings(settings) {
@@ -86,17 +89,17 @@ function applySettings(settings) {
   showInputError(false);
   clearSavedFeedback();
   updateDraft();
-  showStatus(settings.warning || `当前主页：${settings.homepage}`, settings.warning ? 'error' : '');
+  showStatus(settings.warning || t('statusCurrent', [settings.homepage]), settings.warning ? 'error' : '');
 }
 
 async function initialize() {
   fields.disabled = true;
   retryBtn.hidden = true;
-  showStatus('正在读取设置…');
+  showStatus(t('statusLoading'));
   try {
     applySettings(await loadSettings());
   } catch {
-    showStatus('读取设置失败，请重试。现有设置未被修改。', 'error');
+    showStatus(t('statusLoadFail'), 'error');
     retryBtn.hidden = false;
   }
 }
@@ -114,17 +117,17 @@ form.addEventListener('submit', async (event) => {
   fields.disabled = true;
   form.setAttribute('aria-busy', 'true');
   clearSavedFeedback();
-  saveBtn.textContent = '正在保存…';
-  showStatus('正在保存设置…');
+  saveBtn.textContent = t('saveBtnSaving');
+  showStatus(t('statusSaving'));
   try {
     applySettings(await saveSettings({ homepage, syncEnabled: syncInput.checked }));
-    showStatus(`已保存，打开新标签页即可生效。当前主页：${homepage}`, 'success');
-    saveBtn.textContent = '✓ 已保存';
+    showStatus(t('statusSaved', [homepage]), 'success');
+    saveBtn.textContent = t('saveBtnSaved');
     saveBtn.classList.add('saved');
     btnRevertTimer = setTimeout(clearSavedFeedback, 2000);
   } catch {
     clearSavedFeedback();
-    showStatus('保存未完成，请重试。若已启用同步，请检查 Chrome 同步状态。', 'error');
+    showStatus(t('statusSaveFail'), 'error');
   } finally {
     saving = false;
     fields.disabled = false;
@@ -155,13 +158,13 @@ chrome.storage.onChanged.addListener((changes, area) => {
     || area === 'sync' && savedSettings.syncEnabled && changes.homepage;
   if (!relevant) return;
   if (isDirty()) {
-    showStatus('主页设置已在其他页面或设备更新。当前草稿已保留；保存将应用当前草稿。');
+    showStatus(t('statusRemoteUpdate'));
     return;
   }
   // 异步读取期间若用户开始编辑，不覆盖刚输入的草稿。
   loadSettings().then((settings) => {
     if (!saving && !isDirty()) applySettings(settings);
-  }).catch(() => showStatus('无法读取更新后的设置，请稍后重新打开设置页。', 'error'));
+  }).catch(() => showStatus(t('statusRemoteReadFail'), 'error'));
 });
 
 initialize();

@@ -1,0 +1,54 @@
+{
+  "extName": { "message": "主页新标签页" },
+  "extDescription": { "message": "将新标签页重定向到自定义主页" },
+  "pageTitle": { "message": "主页设置 · 主页新标签页" },
+  "logoAlt": { "message": "网站图标" },
+  "headerSubtitle": { "message": "设置打开新标签页时自动跳转的网站地址" },
+  "fieldsetAria": { "message": "主页设置" },
+  "homepageLabel": { "message": "主页地址" },
+  "hpHelp": { "message": "支持域名、内网地址和 IPv6；省略协议时使用 HTTPS，本地服务请填写 http://。" },
+  "errMsg": { "message": "请输入有效的 HTTP 或 HTTPS 网址，例如 kagi.com 或 http://localhost:3000/。" },
+  "presetsLabel": { "message": "快速选择" },
+  "chipsAria": { "message": "快速填入主页地址" },
+  "customChip": { "message": "其他地址" },
+  "syncLabel": { "message": "跨设备同步主页" },
+  "syncHelp": { "message": "默认仅保存在本机。启用并保存后，会把当前地址同步到其他已启用此选项的设备；需要在 Chrome 中开启扩展程序同步。关闭只影响本机。" },
+  "resetBtn": { "message": "恢复默认地址" },
+  "saveBtn": { "message": "保存设置" },
+  "retryBtn": { "message": "重新读取设置" },
+  "footerNote": { "message": "选择或编辑地址后请保存 · 网站图标在本机加载" },
+  "statusLoading": { "message": "正在读取设置…" },
+  "statusLoadFail": { "message": "读取设置失败，请重试。现有设置未被修改。" },
+  "statusDirty": { "message": "有未保存的修改，点击「保存设置」后生效。" },
+  "statusCurrent": {
+    "message": "当前主页：$URL$",
+    "placeholders": { "url": { "content": "$1" } }
+  },
+  "statusSaving": { "message": "正在保存设置…" },
+  "statusSaved": {
+    "message": "已保存，打开新标签页即可生效。当前主页：$URL$",
+    "placeholders": { "url": { "content": "$1" } }
+  },
+  "saveBtnSaving": { "message": "正在保存…" },
+  "saveBtnSaved": { "message": "✓ 已保存" },
+  "statusSaveFail": { "message": "保存未完成，请重试。若已启用同步，请检查 Chrome 同步状态。" },
+  "statusRemoteUpdate": { "message": "主页设置已在其他页面或设备更新。当前草稿已保留；保存将应用当前草稿。" },
+  "statusRemoteReadFail": { "message": "无法读取更新后的设置，请稍后重新打开设置页。" },
+  "logoPresetAlt": {
+    "message": "$NAME$ 图标",
+    "placeholders": { "name": { "content": "$1" } }
+  },
+  "logoHostAlt": {
+    "message": "$HOST$ 的本地字母图标",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "logoCustomAlt": { "message": "自定义主页图标" },
+  "recoveryHeading": { "message": "打开主页" },
+  "recoveryOpening": { "message": "正在打开主页…" },
+  "recoveryManual": { "message": "手动打开主页" },
+  "recoverySettings": { "message": "主页设置" },
+  "recoveryRetry": { "message": "重试" },
+  "recoverySlow": { "message": "跳转尚未完成，可以手动打开主页或检查设置。" },
+  "recoveryLoadFail": { "message": "读取设置失败，正在尝试打开默认主页。" },
+  "recoveryRedirectFail": { "message": "自动跳转失败，请手动打开主页或检查设置。" }
+}

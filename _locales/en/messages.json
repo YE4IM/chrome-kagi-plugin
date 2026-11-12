@@ -1,0 +1,54 @@
+{
+  "extName": { "message": "Homepage New Tab" },
+  "extDescription": { "message": "Redirect the new tab to your custom homepage" },
+  "pageTitle": { "message": "Homepage Settings · Homepage New Tab" },
+  "logoAlt": { "message": "Site icon" },
+  "headerSubtitle": { "message": "Set the site your new tab automatically opens to" },
+  "fieldsetAria": { "message": "Homepage settings" },
+  "homepageLabel": { "message": "Homepage URL" },
+  "hpHelp": { "message": "Supports domains, intranet addresses and IPv6. HTTPS is assumed when the scheme is omitted; use http:// for local services." },
+  "errMsg": { "message": "Enter a valid HTTP or HTTPS URL, e.g. kagi.com or http://localhost:3000/." },
+  "presetsLabel": { "message": "Quick pick" },
+  "chipsAria": { "message": "Quickly fill in a homepage URL" },
+  "customChip": { "message": "Other URL" },
+  "syncLabel": { "message": "Sync homepage across devices" },
+  "syncHelp": { "message": "Saved on this device only by default. When enabled and saved, the current URL syncs to other devices with this option enabled; Chrome extension sync must be on. Turning it off only affects this device." },
+  "resetBtn": { "message": "Restore default" },
+  "saveBtn": { "message": "Save settings" },
+  "retryBtn": { "message": "Reload settings" },
+  "footerNote": { "message": "Save after choosing or editing the URL · Site icons load locally" },
+  "statusLoading": { "message": "Loading settings…" },
+  "statusLoadFail": { "message": "Couldn't load settings. Your existing settings are unchanged." },
+  "statusDirty": { "message": "Unsaved changes — click Save settings to apply them." },
+  "statusCurrent": {
+    "message": "Current homepage: $URL$",
+    "placeholders": { "url": { "content": "$1" } }
+  },
+  "statusSaving": { "message": "Saving settings…" },
+  "statusSaved": {
+    "message": "Saved — takes effect on your next new tab. Current homepage: $URL$",
+    "placeholders": { "url": { "content": "$1" } }
+  },
+  "saveBtnSaving": { "message": "Saving…" },
+  "saveBtnSaved": { "message": "✓ Saved" },
+  "statusSaveFail": { "message": "Save didn't complete. Try again; if sync is enabled, check Chrome sync status." },
+  "statusRemoteUpdate": { "message": "Homepage settings changed on another page or device. Your draft is kept; saving applies the draft." },
+  "statusRemoteReadFail": { "message": "Couldn't read the updated settings. Reopen the settings page later." },
+  "logoPresetAlt": {
+    "message": "$NAME$ icon",
+    "placeholders": { "name": { "content": "$1" } }
+  },
+  "logoHostAlt": {
+    "message": "Local letter icon for $HOST$",
+    "placeholders": { "host": { "content": "$1" } }
+  },
+  "logoCustomAlt": { "message": "Custom homepage icon" },
+  "recoveryHeading": { "message": "Opening homepage" },
+  "recoveryOpening": { "message": "Opening your homepage…" },
+  "recoveryManual": { "message": "Open homepage" },
+  "recoverySettings": { "message": "Homepage settings" },
+  "recoveryRetry": { "message": "Retry" },
+  "recoverySlow": { "message": "Redirect hasn't finished yet — open the homepage manually or check settings." },
+  "recoveryLoadFail": { "message": "Couldn't read settings — trying the default homepage." },
+  "recoveryRedirectFail": { "message": "Automatic redirect failed — open the homepage manually or check settings." }
+}

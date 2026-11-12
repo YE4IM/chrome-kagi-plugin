@@ -1,8 +1,9 @@
 {
     "manifest_version": 3,
-    "name": "主页新标签页",
+    "default_locale": "en",
+    "name": "__MSG_extName__",
     "version": "2.2.0",
-    "description": "将新标签页重定向到自定义主页",
+    "description": "__MSG_extDescription__",
     "chrome_url_overrides": {
         "newtab": "newtab.html"
     },

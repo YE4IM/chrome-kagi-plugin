@@ -11,6 +11,9 @@ const DEFAULT_HOMEPAGE =
 let recoveryShown = false;
 let recoveryTimer;
 
+// 恢复页文案走 chrome.i18n：只在跳转未生效时才注入 DOM，热路径零开销。
+const msg = (key) => chrome.i18n.getMessage(key) || '';
+
 function showRecovery(text) {
   if (recoveryShown) {
     document.getElementById('message').textContent = text;
@@ -18,14 +21,15 @@ function showRecovery(text) {
   }
   recoveryShown = true;
   clearTimeout(recoveryTimer);
+  document.documentElement.lang = chrome.i18n.getUILanguage();
   const main = document.createElement('main');
   main.id = 'recovery';
   main.innerHTML = [
-    '<h1>打开主页</h1>',
-    '<p id="message" role="status">正在打开主页…</p>',
-    '<a id="target" href="' + DEFAULT_HOMEPAGE + '">手动打开主页</a>',
-    '<a id="settings" href="' + chrome.runtime.getURL('options.html') + '">主页设置</a>',
-    '<button type="button" id="retry">重试</button>',
+    '<h1>' + msg('recoveryHeading') + '</h1>',
+    '<p id="message" role="status">' + msg('recoveryOpening') + '</p>',
+    '<a id="target" href="' + DEFAULT_HOMEPAGE + '">' + msg('recoveryManual') + '</a>',
+    '<a id="settings" href="' + chrome.runtime.getURL('options.html') + '">' + msg('recoverySettings') + '</a>',
+    '<button type="button" id="retry">' + msg('recoveryRetry') + '</button>',
   ].join('');
   document.body.appendChild(main);
   document.getElementById('retry').addEventListener('click', () => location.reload());
@@ -34,14 +38,14 @@ function showRecovery(text) {
 
 async function redirect() {
   // 存储或导航未完成时仍可手动打开主页、重试或进入设置。
-  recoveryTimer = setTimeout(() => showRecovery('跳转尚未完成，可以手动打开主页或检查设置。'), 3000);
+  recoveryTimer = setTimeout(() => showRecovery(msg('recoverySlow')), 3000);
   let homepage = DEFAULT_HOMEPAGE;
   let loaded = false;
   try {
     homepage = (await HomepageSettings.loadSettings()).homepage;
     loaded = true;
   } catch {
-    showRecovery('读取设置失败，正在尝试打开默认主页。');
+    showRecovery(msg('recoveryLoadFail'));
   }
   const target = document.getElementById('target');
   if (target) target.href = homepage;
@@ -53,7 +57,7 @@ async function redirect() {
   try {
     location.replace(homepage);
   } catch {
-    showRecovery('自动跳转失败，请手动打开主页或检查设置。');
+    showRecovery(msg('recoveryRedirectFail'));
   }
 }
 
