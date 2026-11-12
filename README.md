@@ -31,7 +31,7 @@
 
 纯原生 HTML/JavaScript，无构建步骤、无第三方依赖。
 
-运行单元测试（32 例，覆盖地址校验、设置读写状态机、镜像跳转与写序）：
+运行单元测试（33 例，覆盖地址校验、设置读写状态机、镜像跳转与写序）：
 
 ```
 node --test
@@ -73,7 +73,7 @@ node --test
 
 Plain HTML/JavaScript — no build step, no third-party dependencies.
 
-Run the unit tests (32 tests covering URL validation, the settings load/save state machine, mirror redirect and write ordering):
+Run the unit tests (33 tests covering URL validation, the settings load/save state machine, mirror redirect and write ordering):
 
 ```
 node --test

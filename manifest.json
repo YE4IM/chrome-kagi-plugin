@@ -2,7 +2,10 @@
     "manifest_version": 3,
     "default_locale": "en",
     "name": "__MSG_extName__",
-    "version": "2.2.0",
+    "version": "2.2.1",
+    "version_name": "2.2.1",
+    "author": "YE4IM",
+    "homepage_url": "https://github.com/YE4IM/chrome-kagi-plugin",
     "description": "__MSG_extDescription__",
     "chrome_url_overrides": {
         "newtab": "newtab.html"

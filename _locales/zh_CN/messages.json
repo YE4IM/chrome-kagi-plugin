@@ -34,6 +34,9 @@
   "statusSaveFail": { "message": "保存未完成，请重试。若已启用同步，请检查 Chrome 同步状态。" },
   "statusRemoteUpdate": { "message": "主页设置已在其他页面或设备更新。当前草稿已保留；保存将应用当前草稿。" },
   "statusRemoteReadFail": { "message": "无法读取更新后的设置，请稍后重新打开设置页。" },
+  "warnInvalidSaved": { "message": "已保存的地址无效，暂时使用默认主页。请重新保存设置。" },
+  "warnInvalidSync": { "message": "同步的地址无效，暂时使用本机主页。请重新保存设置。" },
+  "warnSyncReadFail": { "message": "暂时无法读取同步设置，已使用本机主页。" },
   "logoPresetAlt": {
     "message": "$NAME$ 图标",
     "placeholders": { "name": { "content": "$1" } }

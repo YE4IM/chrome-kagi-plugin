@@ -1,5 +1,6 @@
 /* loadSettings 状态机单测：本机回退、同步覆盖/失效修复/失败降级、空存储。
- * 断言值（含各 warning 文案）均来自对现实现（settings.js）的实际运行结果。 */
+ * 断言值均来自对现实现（settings.js）的实际运行结果；warning 断言为 i18n 键名，
+ * 键在 _locales 双语包中的存在性由末尾守卫用例锁定。 */
 const test = require('node:test');
 const assert = require('node:assert');
 
@@ -73,7 +74,7 @@ test('开启同步：sync 地址无效 → 保留本机地址，标记修复并�
   const s = await settings.loadSettings();
   assert.strictEqual(s.homepage, 'https://local.example/');
   assert.strictEqual(s.needsRepair, true);
-  assert.strictEqual(s.warning, '同步的地址无效，暂时使用本机主页。请重新保存设置。');
+  assert.strictEqual(s.warning, 'warnInvalidSync');
 });
 
 test('开启同步但 sync 未设置地址：保持本机状态，不误报修复', async () => {
@@ -92,7 +93,7 @@ test('sync 读取失败（lastError）：降级用本机地址并提示', async 
   const s = await settings.loadSettings();
   assert.strictEqual(s.homepage, 'https://local.example/');
   assert.strictEqual(s.needsRepair, false);
-  assert.strictEqual(s.warning, '暂时无法读取同步设置，已使用本机主页。');
+  assert.strictEqual(s.warning, 'warnSyncReadFail');
 });
 
 test('本机地址无效且未开同步：回退默认主页并请求修复', async () => {
@@ -101,7 +102,7 @@ test('本机地址无效且未开同步：回退默认主页并请求修复', as
   assert.strictEqual(s.homepage, settings.DEFAULT_HOMEPAGE);
   assert.strictEqual(s.homepage, 'https://kagi.com/');
   assert.strictEqual(s.needsRepair, true);
-  assert.strictEqual(s.warning, '已保存的地址无效，暂时使用默认主页。请重新保存设置。');
+  assert.strictEqual(s.warning, 'warnInvalidSaved');
 });
 
 test('本机无效 + 同步开启 + sync 读取失败：保留本机修复标志，警告为读取失败文案', async () => {
@@ -109,7 +110,7 @@ test('本机无效 + 同步开启 + sync 读取失败：保留本机修复标志
   const s = await settings.loadSettings();
   assert.strictEqual(s.homepage, settings.DEFAULT_HOMEPAGE);
   assert.strictEqual(s.needsRepair, true);
-  assert.strictEqual(s.warning, '暂时无法读取同步设置，已使用本机主页。');
+  assert.strictEqual(s.warning, 'warnSyncReadFail');
 });
 
 test('空存储：默认主页、同步关闭、无警告无修复', async () => {
@@ -127,4 +128,13 @@ test('syncEnabled 非严格 true（如 1）一律视为关闭', async () => {
   installChromeStub({ local: { homepage: 'https://local.example/', syncEnabled: 1 } });
   const s = await settings.loadSettings();
   assert.strictEqual(s.syncEnabled, false);
+});
+
+test('warning 键名在 _locales en/zh 双语包中都存在且非空（防键名漂移静默显示空串）', () => {
+  for (const locale of ['en', 'zh_CN']) {
+    const messages = require(`../_locales/${locale}/messages.json`);
+    for (const key of ['warnInvalidSaved', 'warnInvalidSync', 'warnSyncReadFail']) {
+      assert.ok(messages[key] && messages[key].message, `${locale} 缺少 ${key}`);
+    }
+  }
 });

@@ -79,7 +79,7 @@ test('地址非法：写入前即失败，两个存储都不被触碰', async ()
   const stub = installChromeStub();
   await assert.rejects(
     () => settings.saveSettings({ homepage: 'javascript:alert(1)', syncEnabled: true }),
-    /请输入有效的 HTTP 或 HTTPS 网址/,
+    /Invalid HTTP or HTTPS URL/,
   );
   assert.deepStrictEqual(stub.calls, []);
 });

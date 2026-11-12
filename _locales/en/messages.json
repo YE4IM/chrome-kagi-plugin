@@ -34,6 +34,9 @@
   "statusSaveFail": { "message": "Save didn't complete. Try again; if sync is enabled, check Chrome sync status." },
   "statusRemoteUpdate": { "message": "Homepage settings changed on another page or device. Your draft is kept; saving applies the draft." },
   "statusRemoteReadFail": { "message": "Couldn't read the updated settings. Reopen the settings page later." },
+  "warnInvalidSaved": { "message": "Saved homepage URL is invalid — using the default homepage for now. Please save your settings again." },
+  "warnInvalidSync": { "message": "Synced homepage URL is invalid — using this device's homepage for now. Please save your settings again." },
+  "warnSyncReadFail": { "message": "Couldn't read synced settings right now — using this device's homepage." },
   "logoPresetAlt": {
     "message": "$NAME$ icon",
     "placeholders": { "name": { "content": "$1" } }

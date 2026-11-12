@@ -56,7 +56,7 @@
       try {
         chrome.storage[area][method](value, (result) => {
           const error = chrome.runtime.lastError;
-          if (error) reject(new Error(error.message || '存储操作失败'));
+          if (error) reject(new Error(error.message || 'Storage operation failed'));
           else resolve(result);
         });
       } catch (error) {
@@ -72,11 +72,12 @@
       storageCall('sync', 'get', ['homepage']).catch(() => null),
     ]);
     const cachedHomepage = normalizeHomepage(local.homepage);
+    // warning 是 i18n 键名（_locales/*/messages.json），由 UI 层本地化展示；空串表示无警告。
     const settings = {
       homepage: cachedHomepage || DEFAULT_HOMEPAGE,
       syncEnabled: local.syncEnabled === true,
       needsRepair: local.homepage !== undefined && !cachedHomepage,
-      warning: local.homepage !== undefined && !cachedHomepage ? '已保存的地址无效，暂时使用默认主页。请重新保存设置。' : '',
+      warning: local.homepage !== undefined && !cachedHomepage ? 'warnInvalidSaved' : '',
     };
     if (settings.syncEnabled) {
       if (synced) {
@@ -87,10 +88,10 @@
           settings.needsRepair = false;
         } else if (synced.homepage !== undefined) {
           settings.needsRepair = true;
-          settings.warning = '同步的地址无效，暂时使用本机主页。请重新保存设置。';
+          settings.warning = 'warnInvalidSync';
         }
       } else {
-        settings.warning = '暂时无法读取同步设置，已使用本机主页。';
+        settings.warning = 'warnSyncReadFail';
       }
     }
     return settings;
@@ -98,7 +99,7 @@
 
   async function saveSettings({ homepage, syncEnabled }) {
     const normalized = normalizeHomepage(homepage);
-    if (!normalized) throw new Error('请输入有效的 HTTP 或 HTTPS 网址');
+    if (!normalized) throw new Error('Invalid HTTP or HTTPS URL');
     const enableSync = syncEnabled === true;
     const localValue = { homepage: normalized, syncEnabled: enableSync };
     // 先写本机（含 syncEnabled 标志）：local 失败时 sync 尚未写入，两端保持一致旧值。
