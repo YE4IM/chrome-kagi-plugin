@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ---
 
+## [Unreleased]
+
+### English
+
+- **Changed**: Internal working documents moved out of the repository root — the optimization-space report and the on-device test report (with its 8 evidence screenshots) now live in `docs/` and `docs/screenshots/`; paths inside the test report were updated accordingly. Unit test files stay in `test/`.
+
+### 简体中文
+
+- **变更**：内部工作文档移出仓库根目录——优化空间报告与实机测试报告（含 8 张证据截图）移入 `docs/` 与 `docs/screenshots/`，实机测试报告内的引用路径已同步更新。单元测试文件仍保留在 `test/`。
+
+---
+
 ## [2.2.1] - 2026-11-12
 
 ### English
