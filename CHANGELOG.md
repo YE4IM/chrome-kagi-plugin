@@ -11,10 +11,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### English
 
 - **Changed**: Internal working documents moved out of the repository root — the optimization-space report and the on-device test report (with its 8 evidence screenshots) now live in `docs/` and `docs/screenshots/`; paths inside the test report were updated accordingly. Unit test files stay in `test/`.
+- **Docs**: Both READMEs rewritten in a denser reference style — versioned title, feature sections documenting behavior and edge cases (mirror-redirect invariants, save write ordering, validation rules), plus new "Data and storage keys" and "Files" reference tables. English and 简体中文 pages updated in lockstep.
 
 ### 简体中文
 
 - **变更**：内部工作文档移出仓库根目录——优化空间报告与实机测试报告（含 8 张证据截图）移入 `docs/` 与 `docs/screenshots/`，实机测试报告内的引用路径已同步更新。单元测试文件仍保留在 `test/`。
+- **文档**：中英 README 按更密集的参考风格重写——标题带版本号、功能小节写明行为与边界（镜像跳转不变量、保存写序、校验规则），并新增「数据与存储键」「文件」两张参考表；英文页与简体中文页同步更新。
 
 ---
 
